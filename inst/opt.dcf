@@ -1,0 +1,3 @@
+verbose: if (!is.logical(value) || length(value) != 1 || is.na(value)) stop("The `opt.verbose` option should be boolean.", call. = FALSE)
+character_test: stopifnot(is.character(value))
+foobar_test: match.arg(value, c("foo", "bar"))
