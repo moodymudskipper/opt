@@ -9,28 +9,17 @@ fetch_funs <- function(pkg) {
   )
 }
 
-fetch_funs3 <- function(pkg) {
-  ns <- asNamespace(pkg)
-  funs <- Filter(is.function, as.list(ns))
-  option_funs <- c("rlang_backtrace_on_error")
-  Filter(
-    function(x) any(option_funs %in% all.names(body(x))) || any(option_funs %in% all.names(formals(x))),
-    funs
-  )
-}
-
-# for interactive testing, return all functions that use a package prefixed option
-fetch_funs2 <- function(pkg, opt = NULL) {
+fetch_funs_for_print <- function(pkg, opt = NULL) {
   relevant_funs <- fetch_funs(pkg)
-  pkg <- gsub("\\.", "\\.?", pkg)
+  pkg_pattern <- gsub("\\.", "\\.?", pkg)
   ind_lgl <- sapply(relevant_funs, function(x) {
     opts <- unique(unlist(c(rec(body(x)), rec(formals(x)))))
     if (!is.null(opt)) return(opt %in% opts)
-    any(grepl(paste0("^", pkg), opts ))
+    any(grepl(paste0("^", pkg_pattern), opts ))
   })
-  relevant_funs[ind_lgl]
+  relevant_funs <- names(relevant_funs[ind_lgl])
+  sprintf("`%s%s%s()`", pkg, ifelse(relevant_funs %in% getNamespaceExports(pkg), "::", ":::"), relevant_funs)
 }
-
 
 fetch_options <- function(pkg) {
   relevant_funs <- fetch_funs(pkg)

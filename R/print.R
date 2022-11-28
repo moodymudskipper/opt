@@ -27,7 +27,12 @@ print.opt_function <- function(x, ...) {
       sprintf("help(\"%s\", \"%s\")", topics, package)
     )
   }
-  lines <- c(call_line, topic_lines)
+  # redundant but since we're printing so we have time ?
+  function_lines <- paste(
+    "This option is used by :",
+    toString(fetch_funs_for_print(package, name))
+  )
+  lines <- c(call_line, topic_lines, function_lines)
   writeLines(lines)
   x
 }
