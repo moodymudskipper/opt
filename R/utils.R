@@ -1,11 +1,39 @@
-fetch_options <- function(pkg) {
+
+fetch_funs <- function(pkg) {
   ns <- asNamespace(pkg)
   funs <- Filter(is.function, as.list(ns))
   option_funs <- c("getOption", "local_options", "with_options", "push_options", "peek_options", "peek_option")
-  relevant_funs <- Filter(
+  Filter(
     function(x) any(option_funs %in% all.names(body(x))) || any(option_funs %in% all.names(formals(x))),
     funs
   )
+}
+
+fetch_funs3 <- function(pkg) {
+  ns <- asNamespace(pkg)
+  funs <- Filter(is.function, as.list(ns))
+  option_funs <- c("rlang_backtrace_on_error")
+  Filter(
+    function(x) any(option_funs %in% all.names(body(x))) || any(option_funs %in% all.names(formals(x))),
+    funs
+  )
+}
+
+# for interactive testing, return all functions that use a package prefixed option
+fetch_funs2 <- function(pkg, opt = NULL) {
+  relevant_funs <- fetch_funs(pkg)
+  pkg <- gsub("\\.", "\\.?", pkg)
+  ind_lgl <- sapply(relevant_funs, function(x) {
+    opts <- unique(unlist(c(rec(body(x)), rec(formals(x)))))
+    if (!is.null(opt)) return(opt %in% opts)
+    any(grepl(paste0("^", pkg), opts ))
+  })
+  relevant_funs[ind_lgl]
+}
+
+
+fetch_options <- function(pkg) {
+  relevant_funs <- fetch_funs(pkg)
   options <- unique(unlist(lapply(relevant_funs, function(x) c(rec(body(x)), rec(formals(x))))))
   options <- sort(unname(unlist(Filter(is.character, options))))
   # for data.table basically, since their options follow the datatable.print.topn format (no dot)
@@ -20,7 +48,7 @@ rec <- function(call) {
     getOption,
     local_options, with_options, push_options, peek_options, peek_option,
     rlang::local_options, rlang::with_options, rlang::push_options, rlang::peek_options, rlang::peek_option
-  )) return(as.list(call)[-1])
+  )) return(c(as.list(call)[-1], names(call)[-1]))
   unlist(lapply(call, rec))
 }
 

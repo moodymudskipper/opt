@@ -17,9 +17,17 @@ print.opt_package <- function(x, ...) {
 print.opt_function <- function(x, ...) {
   name <-  attr(x, "name")
   package <- attr(x, "package")
-  writeLines(sprintf(
+  topics <- filter_doc(package, name)
+  call_line <- sprintf(
     "Call `opt$%s$%s()` to get and `opt$%s$%s(value)` to set.",
     package, name, package, name
-  ))
+  )
+  topic_lines <- if (length(topics)) {
+    c("Try the following topic(s) for help on this option:",
+      sprintf("help(\"%s\", \"%s\")", topics, package)
+    )
+  }
+  lines <- c(call_line, topic_lines)
+  writeLines(lines)
   x
 }
