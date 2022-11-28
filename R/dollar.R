@@ -19,7 +19,7 @@
 
   fun <- function(value) {
     if (missing(value)) {
-      if (!isFALSE(getOption("opt.verbose"))) message(sprintf("getOption(%s)", y))
+      if (!isFALSE(getOption("opt.verbose"))) message(sprintf("getOption(\"%s\")", y))
       return(getOption(y))
     }
     eval(option_check)
