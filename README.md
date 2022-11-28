@@ -9,9 +9,6 @@ You can set options using autocomplete, so you easily find the options
 you need and don’t misspell them. It also includes a mechanism to check
 option values.
 
-EDIT: This seems to work with `devtools::load_all()` but not with
-`library(opts)`, will fix ASAP
-
 ## Installation
 
 Install with:

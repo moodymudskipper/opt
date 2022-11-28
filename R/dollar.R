@@ -34,6 +34,7 @@
   fun
 }
 
+#' @importFrom utils .DollarNames
 #' @export
 .DollarNames.opt_object <- function(x, pattern="") {
   #print("!")
