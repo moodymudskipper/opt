@@ -8,7 +8,9 @@ fetch_options <- function(pkg) {
   )
   options <- unique(unlist(lapply(relevant_funs, function(x) c(rec(body(x)), rec(formals(x))))))
   options <- sort(unname(unlist(Filter(is.character, options))))
-  options <- grep(paste0("^", pkg, "[._]"), options, value = TRUE)
+  # for data.table basically, since their options follow the datatable.print.topn format (no dot)
+  pkg <- gsub("\\.", "\\.?", pkg)
+  options <- grep(paste0("^", pkg), options, value = TRUE)
   options
 }
 
