@@ -33,3 +33,13 @@ filter_doc <- function(pkg, opt_name) {
     (endsWith(topic_names, "options") | endsWith(topic_names, "config") | endsWith(topic_names, "package"))
   topic_names[found_option_name | found_option_suffix]
 }
+
+filter_doc_ev <- function(pkg, opt_name) {
+  topic_names <- get_topics(pkg)
+  topic_pages <- sapply(topic_names, fetch_rdb, pkg = pkg, USE.NAMES = TRUE)
+  topic_pages <- lapply(topic_pages, paste, collapse = "")
+  # find raw ev name in doc ------------------------------------------------
+  ev_name_pattern <- gsub("\\.", "\\.", opt_name, ignore.case = TRUE)
+  found_ev_name <- grepl(ev_name_pattern, topic_pages)
+  topic_names[found_ev_name]
+}
