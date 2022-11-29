@@ -15,7 +15,7 @@ fetch_rdb <- function(pkg, topic) {
   tools:::fetchRdDB(rdb_path, topic)
 }
 
-filter_doc <- function(pkg, opt_name) {
+filter_doc_opt <- function(pkg, opt_name) {
   topic_names <- get_topics(pkg)
   topic_pages <- sapply(topic_names, fetch_rdb, pkg = pkg, USE.NAMES = TRUE)
   topic_pages <- lapply(topic_pages, paste, collapse = "")

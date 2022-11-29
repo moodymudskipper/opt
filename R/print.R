@@ -17,7 +17,7 @@ print.opt_package <- function(x, ...) {
 print.opt_function <- function(x, ...) {
   name <-  attr(x, "name")
   package <- attr(x, "package")
-  topics <- filter_doc(package, name)
+  topics <- filter_doc_opt(package, name)
   call_line <- sprintf(
     "Call `opt$%s$%s()` to get and `opt$%s$%s(value)` to set.",
     package, name, package, name
@@ -30,7 +30,7 @@ print.opt_function <- function(x, ...) {
   # redundant but since we're printing so we have time ?
   function_lines <- paste(
     "This option is used by :",
-    toString(fetch_funs_for_print(package, name))
+    toString(fetch_opt_funs_for_print(package, name))
   )
   lines <- c(call_line, topic_lines, function_lines)
   writeLines(lines)
@@ -57,7 +57,7 @@ print.ev_package <- function(x, ...) {
 print.ev_function <- function(x, ...) {
   name <-  attr(x, "name")
   package <- attr(x, "package")
-  topics <- filter_doc(package, name)
+  topics <- filter_doc_ev(package, name)
   call_line <- sprintf(
     "Call `ev$%s$%s()` to get and `ev$%s$%s(value)` to set.",
     package, name, package, name

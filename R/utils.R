@@ -1,5 +1,5 @@
 
-fetch_funs <- function(pkg) {
+fetch_opt_funs <- function(pkg) {
   ns <- asNamespace(pkg)
   funs <- Filter(is.function, as.list(ns))
   option_funs <- c("getOption", "local_options", "with_options", "push_options", "peek_options", "peek_option")
@@ -18,8 +18,8 @@ fetch_ev_funs <- function(pkg) {
   )
 }
 
-fetch_funs_for_print <- function(pkg, opt = NULL) {
-  relevant_funs <- fetch_funs(pkg)
+fetch_opt_funs_for_print <- function(pkg, opt = NULL) {
+  relevant_funs <- fetch_opt_funs(pkg)
   pkg_pattern <- gsub("\\.", "\\.?", pkg)
   ind_lgl <- sapply(relevant_funs, function(x) {
     opts <- unique(unlist(c(rec(body(x)), rec(formals(x)))))
@@ -43,7 +43,7 @@ fetch_ev_funs_for_print <- function(pkg, ev = NULL) {
 }
 
 fetch_options <- function(pkg) {
-  relevant_funs <- fetch_funs(pkg)
+  relevant_funs <- fetch_opt_funs(pkg)
   options <- unique(unlist(lapply(relevant_funs, function(x) c(rec(body(x)), rec(formals(x))))))
   options <- sort(unname(unlist(Filter(is.character, options))))
   # for data.table basically, since their options follow the datatable.print.topn format (no dot)
