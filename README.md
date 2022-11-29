@@ -51,7 +51,7 @@ Printing the option displays hints to where to find help and where the
 function is used in its package :
 
 ``` r
-pt$cli$cli.ansi
+opt$cli$cli.ansi
 #> Call `opt$cli$cli.ansi()` to get and `opt$cli$cli.ansi(value)` to set.
 #> Try the following topic(s) for help on this option:
 #> help("ansi_simplify", "cli")
