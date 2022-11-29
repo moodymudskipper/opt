@@ -38,11 +38,42 @@ set your options as illustrated below.
 
 ![](man/figures/opt2.png)
 
-![](man/figures/opt3.png)
+```{r, eval = FALSE}
+# set option
+opt$cli$cli.ansi(TRUE)
+#> options(cli.ansi = TRUE)
+
+# get option
+opt$cli$cli.ansi()
+#> getOption("cli.ansi")
+#> [1] TRUE
+
+# same as base R
+getOption("cli.ansi")
+#> [1] TRUE
+```
+
 Set `options(opt.verbose = FALSE)` (or `opt$opt$opt.verbose(FALSE)` !) to disable
 the `options()` / `getOptions()` messages. {opt} is a bit too slow to be used in
 packaged code and might not be worth an extra dependency so this message helps you copy and paste
 the relevant base R call.
+
+Printing the option displays hints to where to find help and where the function is
+used in its package :
+
+```{r, eval = FALSE}
+pt$cli$cli.ansi
+#> Call `opt$cli$cli.ansi()` to get and `opt$cli$cli.ansi(value)` to set.
+#> Try the following topic(s) for help on this option:
+#> help("ansi_simplify", "cli")
+#> help("ansi_strip", "cli")
+#> help("ansi-styles", "cli")
+#> help("cli-config", "cli")
+#> help("make_ansi_style", "cli")
+#> help("style_hyperlink", "cli")
+#> This option is used by : `cli::is_ansi_tty()`
+```
+
 
 The `ALL` option integrates all package options + all other options found in `options()`,
 it's convenient to find any option with autocomplete, for example here looking for `width`:
@@ -58,6 +89,15 @@ library(opt)
 names(opts$callr)
 #> [1] "callr.compress_transport" "callr.error"              "callr.traceback" 
 ```
+
+## ev
+
+`ev` stands for "environment variable" and is `opt`'s little sister, it behaves
+the same but for environment variables.
+
+![](man/figures/ev.png)
+
+FIXME: better rename as ENV ?
 
 ## How to validate option values
 
