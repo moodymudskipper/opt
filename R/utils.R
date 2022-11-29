@@ -82,7 +82,6 @@ globals <- new.env()
 update_loaded_options <- function() {
   new_namespaces <- setdiff(loadedNamespaces(), names(globals$loaded_options))
   new_options <- sapply(new_namespaces, function(pkg) {
-    # if (pkg == "opt") browser()
     file <- system.file("opt.dcf", package = pkg)
     if (file == "") {
       fetch_options(pkg)
@@ -102,7 +101,6 @@ update_loaded_options <- function() {
 update_loaded_evs <- function() {
   new_namespaces <- setdiff(loadedNamespaces(), names(globals$loaded_evs))
   new_evs <- sapply(new_namespaces, function(pkg) {
-    # if (pkg == "opt") browser()
     file <- system.file("ev.dcf", package = pkg)
     if (file == "") {
       fetch_evs(pkg)
