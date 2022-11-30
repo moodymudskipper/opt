@@ -34,7 +34,7 @@ print.opt_function <- function(x, ...) {
   )
   lines <- c(call_line, topic_lines, function_lines)
   writeLines(lines)
-  x
+  invisible(x)
 }
 
 
@@ -73,5 +73,5 @@ print.ev_function <- function(x, ...) {
   )
   lines <- c(call_line, topic_lines, function_lines)
   writeLines(lines)
-  x
+  invisible(x)
 }
