@@ -17,11 +17,20 @@ print.opt_package <- function(x, ...) {
 print.opt_function <- function(x, ...) {
   name <-  attr(x, "name")
   package <- attr(x, "package")
-  topics <- filter_doc_opt(package, name)
   call_line <- sprintf(
     "Call `opt$%s$%s()` to get and `opt$%s$%s(value)` to set.",
     package, name, package, name
   )
+  if(package == "ALL") {
+    package <- sub("^([^._:]+)[._:].*$", "\\1", name)
+    not_from_package <- !length(find.package(package, quiet = TRUE))
+    if (not_from_package) {
+      writeLines(call_line)
+      return(invisible(x))
+    }
+  }
+
+  topics <- filter_doc_opt(package, name)
   topic_lines <- if (length(topics)) {
     c("Try the following topic(s) for help on this option:",
       sprintf("help(\"%s\", \"%s\")", topics, package)
@@ -57,11 +66,19 @@ print.ev_package <- function(x, ...) {
 print.ev_function <- function(x, ...) {
   name <-  attr(x, "name")
   package <- attr(x, "package")
-  topics <- filter_doc_ev(package, name)
   call_line <- sprintf(
     "Call `ev$%s$%s()` to get and `ev$%s$%s(value)` to set.",
     package, name, package, name
   )
+  if(package == "ALL") {
+    package <- sub("^([^._:]+)[._:].*$", "\\1", name)
+    not_from_package <- !length(find.package(package, quiet = TRUE))
+    if (not_from_package) {
+      writeLines(call_line)
+      return(invisible(x))
+    }
+  }
+  topics <- filter_doc_ev(package, name)
   topic_lines <- if (length(topics)) {
     c("Try the following topic(s) for help on this option:",
       sprintf("help(\"%s\", \"%s\")", topics, package)
