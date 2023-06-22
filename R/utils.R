@@ -4,7 +4,7 @@ fetch_opt_funs <- function(pkg) {
   funs <- Filter(is.function, as.list(ns))
   option_funs <- c("getOption", "local_options", "with_options", "push_options", "peek_options", "peek_option")
   Filter(
-    function(x) any(option_funs %in% all.names(body(x))) || any(option_funs %in% all.names(formals(x))),
+    function(x) any(option_funs %in% all.names(body(x))) || any(option_funs %in% unlist(lapply(formals(x), all.names))),
     funs
   )
 }
