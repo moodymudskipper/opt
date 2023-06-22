@@ -125,6 +125,14 @@ The code of loaded packages is inspected for calls to `getOption()` or
 It’s done when {opt}’s namespace is loaded, but also updated anytime you
 type `opt$`.
 
+{opts} most likely won’t display options that don’t exist, however it
+might miss existing options if they are fetched in the package using
+other functions than the above, or by defining a variable first and
+calling `getOption(var)` for instance.
+
+For example the package `{diffobj}` uses a function `gdo()` to set
+options and prevents `{opt}` to fetch those with static analysis.
+
 ## Dependencies
 
 {opt} has zero dependencies so it’s safe to have `library(opt)` in your
