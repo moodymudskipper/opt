@@ -31,18 +31,37 @@ print.opt_function <- function(x, ...) {
   }
 
   topics <- filter_doc_opt(package, name)
-  topic_lines <- if (length(topics)) {
-    c("Try the following topic(s) for help on this option:",
-      sprintf("help(\"%s\", \"%s\")", topics, package)
+
+  cli_is_installed <- requireNamespace("cli", quietly = TRUE)
+  if (cli_is_installed) {
+    topic_lines <- if (length(topics)) {
+        c("Try the following topic(s) for help on this option:",
+          cli::style_hyperlink(
+            sprintf("help(\"%s\", \"%s\")", topics, package),
+            sprintf("ide:help:%s::%s", package, topics)
+            )
+        )
+    }
+    function_lines <- paste(
+      "This option is used by :",
+      toString(fetch_opt_funs_for_print(package, name, cli = TRUE))
     )
+    writeLines(call_line)
+    for (line in topic_lines) cli::cli_text(line)
+    for (line in function_lines) cli::cli_text(line)
+  } else {
+    topic_lines <- if (length(topics)) {
+      c("Try the following topic(s) for help on this option:",
+        sprintf("help(\"%s\", \"%s\")", topics, package)
+      )
+    }
+    function_lines <- paste(
+      "This option is used by :",
+      toString(fetch_opt_funs_for_print(package, name))
+    )
+    lines <- c(call_line, topic_lines, function_lines)
+    writeLines(lines)
   }
-  # redundant but since we're printing so we have time ?
-  function_lines <- paste(
-    "This option is used by :",
-    toString(fetch_opt_funs_for_print(package, name))
-  )
-  lines <- c(call_line, topic_lines, function_lines)
-  writeLines(lines)
   invisible(x)
 }
 
