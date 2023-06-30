@@ -45,7 +45,7 @@ view_function <- function(x) {
   eval(substitute(View(x)))
 }
 
-fetch_ev_funs_for_print <- function(pkg, ev = NULL) {
+fetch_ev_funs_for_print <- function(pkg, ev = NULL, cli = FALSE) {
   relevant_funs <- fetch_ev_funs(pkg)
   pkg_pattern <- gsub("\\.", "\\.?", pkg)
   ind_lgl <- sapply(relevant_funs, function(x) {
@@ -54,7 +54,12 @@ fetch_ev_funs_for_print <- function(pkg, ev = NULL) {
     any(grepl(paste0("^", pkg_pattern), evs))
   })
   relevant_funs <- names(relevant_funs[ind_lgl])
-  sprintf("`%s%s%s()`", pkg, ifelse(relevant_funs %in% getNamespaceExports(pkg), "::", ":::"), relevant_funs)
+  funs <- sprintf("%s%s%s", pkg, ifelse(relevant_funs %in% getNamespaceExports(pkg), "::", ":::"), relevant_funs)
+  if (cli) {
+    sprintf("{.run [`%s()`](opt::view_function(%s))}", funs, funs)
+  } else {
+    sprintf("`%s()`", funs)
+  }
 }
 
 fetch_options <- function(pkg) {
